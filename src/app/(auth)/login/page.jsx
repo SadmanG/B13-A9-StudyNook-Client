@@ -46,18 +46,18 @@ const LoginPage = () => {
     // Then use name="email" or name ="password".
 
     return (
-        <div className="container mx-auto min-h-[80vh] flex justify-center items-center bg-[#F6C992]">
-            <div className="p-4 rounded-xl bg-[#F3E308]">
-                <h2 className="font-bold text-3xl text-center mb-6">Login your Account</h2>
+        <div className="container mx-auto min-h-[80vh] flex justify-center items-center bg-sky-300">
+            <div className="p-4 rounded-xl bg-gray-900">
+                <h2 className="text-white font-bold text-3xl text-center mb-6">Login your Account</h2>
                 <form className="space-y-4" onSubmit={handleSubmit(handleLoginFunc)}>
                     <fieldset className="fieldset">
-                        <legend className="fieldset-legend">Email Address</legend>
+                        <legend className="text-white fieldset-legend">Email Address</legend>
                         <input type="email" className="input" placeholder="Enter your Email Address"
                             {...register("email", { required: "Email must be given!" })} />
                         {errors.email && <p className="text-red-600">{errors.email.message}</p>}
                     </fieldset>
                     <fieldset className="fieldset relative">
-                        <legend className="fieldset-legend">Password</legend>
+                        <legend className="text-white fieldset-legend">Password</legend>
                         <input type={isShowPassword ? "text":"password"}
                         className="input" placeholder="Enter your Password"
                             {...register("password", { required: "Password must be filled!" })} />
@@ -67,7 +67,7 @@ const LoginPage = () => {
                     </fieldset>
                     <button className="btn w-full bg-green-500 border-black text-white">Login</button>
                 </form>
-                <p className="mt-6">Don&apos;t have an account? <Link href={"/register"} className="text-blue-600">Register Now</Link></p>
+                <p className="text-white mt-6">Don&apos;t have an account? <Link href={"/register"} className="text-blue-600">Register Now</Link></p>
             </div>
         </div>
     );

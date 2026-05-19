@@ -1,50 +1,114 @@
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
-import { FaFireAlt, FaStar } from 'react-icons/fa';
+import { FaFireAlt, FaStar, FaUsers, FaRegClock, FaMapMarkerAlt } from 'react-icons/fa';
 
-const HomePage = () => {
-    const productsData = [
-        { "id": 1, "name": "UV Protection Sunglasses", "brand": "SunShade", "price": 15, "rating": 4.7, "stock": 10, "description": "Stylish UV protection sunglasses perfect for summer outings.", "image": "https://plus.unsplash.com/premium_photo-1693222144072-7f9ddceeb7c7?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "category": "Accessories" },
-        { "id": 2, "name": "Quick-Dry Beach Towel", "brand": "AquaSoft", "price": 25, "rating": 4.8, "stock": 45, "description": "Sand-free microfiber towel that dries three times faster than cotton.", "image": "https://images.unsplash.com/photo-1625931046289-e51edea3e176?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fGJlYWNoJTIwdG93ZWx8ZW58MHx8MHx8fDA%3D", "category": "Outdoor Gear" },
-        { "id": 5, "name": "Insulated Water Bottle", "brand": "HydroChill", "price": 30, "rating": 4.6, "stock": 25, "description": "Double-walled stainless steel bottle that keeps drinks cold for 24 hours.", "image": "https://images.unsplash.com/photo-1625708458528-802ec79b1ed8?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aW5zdWxhdGVkJTIwd2F0ZXIlMjBib3R0bGV8ZW58MHx8MHx8fDA%3D", "category": "Home & Kitchen" }
-    ]
+const StudyRoomsPage = () => {
+    const roomsData = [
+        {
+            "id": 1,
+            "name": "Elite Quad Study Suite",
+            "location": "Central Library - 3rd Floor",
+            "price": 15,
+            "rating": 4.9,
+            "capacity": "4-6 People",
+            "description": "Quiet, soundproof suite equipped with a 4K presentation monitor and whiteboard.",
+            "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "category": "Private Suite"
+        },
+        {
+            "id": 2,
+            "name": "Collaborative Media Hub",
+            "location": "North Wing - 1st Floor",
+            "price": 25,
+            "rating": 4.8,
+            "capacity": "8-10 People",
+            "description": "Perfect for group projects. Features ultra-fast Wi-Fi, casting setups, and modular desks.",
+            "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "category": "Media Room"
+        },
+        {
+            "id": 5,
+            "name": "Solo Focus Pod",
+            "location": "Law Library - Quiet Zone",
+            "price": 8,
+            "rating": 4.7,
+            "capacity": "1 Person",
+            "description": "Ergonomic seating with noise-canceling acoustics designed for intensive individual study.",
+            "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "category": "Individual Pod"
+        }
+    ];
+
     return (
         <div>
-            <div className="min-h-screen p-10 font-sans">
+            {/* Matches your existing dark/teal background layout */}
+            <div className="min-h-screen p-10 font-sans bg-gray-700">
                 <div className="max-w-6xl mx-auto">
-                    <h2 className="text-5xl font-bold mb-8 text-white px-2 flex justify-center items-center"><span className='text-red-600'><FaFireAlt /></span> <p className='flex justify-center items-center'>Our Popular Products and Hot Deals</p> <span className='text-red-600'><FaFireAlt /></span></h2>
 
-                    {/* Responsive Grid exactly like the image */}
+                    {/* Header with Hot Deals styling */}
+                    <h2 className="text-3xl md:text-5xl font-bold mb-8 text-white px-2 flex justify-center items-center gap-3 text-center">
+                        <span className='text-sky-300'><FaFireAlt /></span>
+                        <span>Popular Study Rooms & Hot Time Slots</span>
+                        <span className='text-sky-300'><FaFireAlt /></span>
+                    </h2>
+
+                    {/* Responsive Grid exactly like your original image structure */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {productsData.map((product) => (
-                            <div key={product.id} className="card bg-sky-100 shadow-sm">
-                                <figure className="relative h-64 w-full">
+                        {roomsData.map((room) => (
+                            // Removed DaisyUI 'card', replaced with raw Tailwind
+                            <div key={room.id} className="rounded-2xl overflow-hidden bg-sky-100 shadow-sm border border-sky-200/50 flex flex-col justify-between">
+                                <div className="relative h-64 w-full">
                                     <Image
-                                        src={product.image}
-                                        alt={product.name}
+                                        src={room.image}
+                                        alt={room.name}
                                         fill
                                         className="object-cover"
+                                        sizes="(max-w-768px) 100vw, 33vw"
+                                        priority={room.id === 1}
                                     />
-                                </figure>
-                                <div className="card-body">
-                                    <h2 className="card-title text-2xl">{product.name}</h2>
-                                    <p>{product.description}</p>
-                                    <p className="text-xl flex gap-2 items-center">
-                                        Rating: {product.rating} <span className='text-yellow-400'><FaStar /></span>
+                                    <span className="absolute top-3 right-3 bg-[#1E3A8A] text-white text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm">
+                                        {room.category}
+                                    </span>
+                                </div>
+                                <div className="p-6 flex flex-col grow">
+                                    <h2 className="text-2xl font-bold text-slate-900 mb-1">{room.name}</h2>
+                                    <p className="flex items-center gap-2 text-slate-500 font-medium text-lg mb-6">
+                                        <FaMapMarkerAlt />
+                                        <span>{room.location}</span>
                                     </p>
-                                    <p className='text-xl'>Price: {product.price} $</p>
-                                    <div className="card-actions justify-end">
-                                        <Link href={`/${product.id}`}><button className='btn bg-[#069494] text-white'>See Details</button></Link>
+
+                                    <p className="text-slate-600 text-sm mb-4 grow">{room.description}</p>
+                                    <div className="flex flex-col gap-2 border-t border-b border-sky-200/60 py-3 mb-4">
+                                        <div className="text-base font-semibold text-slate-700 flex gap-2 items-center">
+                                            <FaUsers className="text-[#1E3A8A]" /> Capacity: <span className="text-slate-900 font-normal">{room.capacity}</span>
+                                        </div>
+                                        <div className="text-base font-semibold text-slate-700 flex gap-2 items-center">
+                                            Rating: <span className="text-slate-900 font-normal">{room.rating}</span>
+                                            <span className='text-amber-500'><FaStar /></span>
+                                        </div>
                                     </div>
+                                    <div className="flex items-center justify-between mt-auto pt-2">
+                                        <div className="flex flex-col">
+                                            <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Hourly Rate</span>
+                                            <p className='text-2xl font-extrabold text-[#1E3A8A]'>${room.price}/hr</p>
+                                        </div>
+                                        <Link href={`/rooms/${room.id}`}>
+                                            <button className='px-5 py-2.5 rounded-xl font-semibold text-white bg-[#069494] hover:bg-[#057a7a] transition-all duration-200 flex items-center gap-2 shadow-sm shadow-teal-900/10 active:scale-95'>
+                                                <FaRegClock /> Book Room
+                                            </button>
+                                        </Link>
+                                    </div>
+
                                 </div>
                             </div>
                         ))}
                     </div>
+
                 </div>
             </div>
         </div>
     );
 };
 
-export default HomePage;
+export default StudyRoomsPage;

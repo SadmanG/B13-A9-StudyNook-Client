@@ -26,7 +26,7 @@ const Navbar = () => {
                         tabIndex="-1"
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-22 mt-3 w-52 p-2 shadow">
                         <li><NavLink href={'/home'}>Home</NavLink></li>
-                        <li><NavLink href={'/products'}>Products</NavLink></li>
+                        <li><NavLink href={'/rooms'}>All Rooms</NavLink></li>
                         <li><NavLink href={'/myprofile'}>My Profile</NavLink></li>
                         <li>
                             {isPending ? (<span className="loading loading-spinner loading-lg"></span>) : user ? (<div className='flex flex-col items-center gap-2'>
@@ -49,7 +49,7 @@ const Navbar = () => {
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
                     <li className='text-white'><NavLink href={'/home'}>Home</NavLink></li>
-                    <li className='text-white'><NavLink href={'/products'}>Products</NavLink></li>
+                    <li className='text-white'><NavLink href={'/rooms'}>All Rooms</NavLink></li>
                     <li className='text-white'><NavLink href={'/myprofile'}>My Profile</NavLink></li>
                 </ul>
             </div>
