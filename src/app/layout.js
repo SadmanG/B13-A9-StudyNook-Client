@@ -17,7 +17,7 @@ export const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "SunCart | Home",
+  title: "StudyNook | Home",
   description: "Home Page",
 };
 

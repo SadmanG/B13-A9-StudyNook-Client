@@ -5,7 +5,7 @@ const DetailsLayout = ({children}) => {
     return (
         <div>
             <Navbar></Navbar>
-            <main className="bg-[#F3E308]">{children}</main>
+            <main>{children}</main>
             <Footer></Footer>
         </div>
     );

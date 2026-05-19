@@ -1,7 +1,7 @@
 import Footer from "@/components/shared/Footer";
 import Navbar from "@/components/shared/Navbar";
 
-const MyProfileLayout = ({children}) => {
+const AddRoomLayout = ({children}) => {
     return (
         <>
             <Navbar></Navbar>
@@ -11,4 +11,4 @@ const MyProfileLayout = ({children}) => {
     );
 };
 
-export default MyProfileLayout;
+export default AddRoomLayout;

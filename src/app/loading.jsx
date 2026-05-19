@@ -1,7 +1,7 @@
 const LoadingPage = () => {
     return (
         <div className='flex h-[85vh] items-center justify-center'>
-            Global Loading
+            Loading Our Study Rooms
             <span className="loading loading-dots loading-xl"></span>
         </div>
     );
