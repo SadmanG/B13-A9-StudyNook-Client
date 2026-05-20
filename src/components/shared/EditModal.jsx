@@ -2,6 +2,7 @@
 
 import { Envelope } from "@gravity-ui/icons";
 import { Button, Input, Label, Modal, Surface, TextField, FieldError, Select, ListBox, TextArea } from "@heroui/react";
+import { redirect } from "next/navigation";
 import { BiEdit } from "react-icons/bi";
 
 export function EditModal({ room }) {
@@ -28,6 +29,7 @@ export function EditModal({ room }) {
             },
             body: JSON.stringify(studyRoom)
         });
+        redirect('/rooms');
     };
     return (
         <Modal>

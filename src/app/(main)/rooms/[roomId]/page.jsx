@@ -1,8 +1,8 @@
 import Image from 'next/image';
 import { FaStar, FaUsers, FaRegClock, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa';
 import { Button } from '@heroui/react';
-import { TrashBin } from '@gravity-ui/icons';
 import { EditModal } from '@/components/shared/EditModal';
+import { DeleteRoomAlert } from '@/components/shared/DeleteRoomAlert';
 
 export const metadata = {
   title: 'StudyNook | Room Details',
@@ -100,12 +100,7 @@ const RoomDetails = async ({ params }) => {
           </div>
           <div className='mt-4 flex justify-between'>
             <EditModal room={room}/>
-            <Button
-              className="bg-red-500 hover:bg-red-600 text-white font-bold text-lg px-8 py-6 rounded-xl shadow-lg shadow-teal-950/20 active:scale-98 transition-all"
-            >
-              <TrashBin className="text-xl" />
-              Delete Room
-            </Button>
+            <DeleteRoomAlert room={room}/>
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
 'use client'
 import { FieldError, Input, Label, TextField, Select, ListBox, TextArea, Button, Card } from '@heroui/react';
+import { redirect } from 'next/navigation';
 import React from 'react';
 
 const AddRoomPage = () => {
@@ -26,6 +27,7 @@ const AddRoomPage = () => {
             },
             body: JSON.stringify(studyRoom)
         });
+        redirect('/rooms');
     };
 
     return (
