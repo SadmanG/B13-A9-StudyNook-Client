@@ -24,5 +24,6 @@ export async function proxy(request) {
 // export default function proxy(request) { ... }
 
 export const config = {
-    matcher: ['/myprofile', '/update', '/rooms/:roomId+'],
+    matcher: ['/myprofile', '/update'],
 }
+//, '/rooms/:roomId+'

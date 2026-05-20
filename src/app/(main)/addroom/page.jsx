@@ -1,155 +1,169 @@
 'use client'
 import { FieldError, Input, Label, TextField, Select, ListBox, TextArea, Button, Card } from '@heroui/react';
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const AddRoomPage = () => {
-    const onSubmit = async(e) => {
+    const router = useRouter();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const onSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        const studyRoom = Object.fromEntries(formData.entries());
-        // console.log(studyRoom);
-        const res = await fetch('http://localhost:5000/rooms', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(studyRoom)
-        })
-        const data = await res.json();
-        // console.log(data);
-    }
+
+        const baseData = Object.fromEntries(formData.entries());
+        const amenities = formData.getAll('amenities[]').filter(item => item.trim() !== '');
+
+        const studyRoom = {
+            ...baseData,
+            price: Number(baseData.price),
+            rating: Number(baseData.rating),
+            amenities: amenities
+        };
+
+        delete studyRoom['amenities[]'];
+
+        try {
+            const res = await fetch('http://localhost:5000/rooms', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(studyRoom)
+            });
+
+            if (res.ok) {
+                // 3. Trigger immediate routing to the rooms gallery path
+                router.refresh();
+                router.push('/rooms');
+                window.location.replace = '/rooms';
+            } else {
+                alert('Failed to submit study room data.');
+                setIsSubmitting(false);
+            }
+        } catch (error) {
+            console.error("Submission error:", error);
+            alert('An unexpected error occurred.');
+            setIsSubmitting(false);
+        }
+    };
+
     return (
-        <div className='p-5 max-w-7xl mx-auto'>
-            <h1 className='text-2xl font-bold'>Add A New Study Room</h1>
-            <Card className='bg-gray-900'>
-                <form
-                    onSubmit={onSubmit}
-                    className="p-10 space-y-8"
-                >
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* Study Room Name */}
-                        <div className="md:col-span-2">
+        <div className="min-h-screen bg-gray-950 p-4 sm:p-8 flex items-center justify-center font-sans">
+            {/* Reduced max-w from 7xl to 3xl to make it compact and visually professional */}
+            <Card className="w-full max-w-3xl bg-gray-900 border border-gray-800 shadow-2xl p-6 sm:p-10 rounded-3xl">
+
+                {/* Clean Header Area */}
+                <div className="mb-8 border-b border-gray-800 pb-5">
+                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                        Add New Study Room
+                    </h1>
+                    <p className="text-gray-400 text-sm mt-1">
+                        Fill out the specifications below to register a new workspace configuration.
+                    </p>
+                </div>
+
+                <form onSubmit={onSubmit} className="space-y-6">
+                    {/* SECTION 1: Core Identification */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <div className="sm:col-span-2">
                             <TextField name="name" isRequired>
-                                <Label className='text-white'>Study Room Name</Label>
-                                <Input placeholder="Innovation Brainstorm Room" className="rounded-2xl" />
-                                <FieldError />
+                                <Label className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1.5 block">Study Room Name</Label>
+                                <Input placeholder="Innovation Brainstorm Room" className="rounded-xl bg-gray-950 text-white" />
+                                <FieldError className="text-rose-500 text-xs mt-1" />
                             </TextField>
                         </div>
 
-                        {/* Location */}
                         <TextField name="location" isRequired>
-                            <Label className='text-white'>Location</Label>
-                            <Input placeholder="Engineering Lab" className="rounded-2xl" />
-                            <FieldError />
+                            <Label className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1.5 block">Location / Placement</Label>
+                            <Input placeholder="Engineering Lab - 2nd Floor" className="rounded-xl bg-gray-950 text-white" />
+                            <FieldError className="text-rose-500 text-xs mt-1" />
                         </TextField>
 
-                        {/* Category - Updated Select Component */}
                         <div>
-                            <Select
-                                name="category"
-                                isRequired
-                                className="w-full"
-                                placeholder="Select category"
-                            >
-                                <Label className='text-white'>Category</Label>
-                                <Select.Trigger className="rounded-2xl">
+                            <Select name="category" isRequired className="w-full" placeholder="Select category">
+                                <Label className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1.5 block">Category</Label>
+                                <Select.Trigger className="rounded-xl bg-gray-950 border-gray-800 text-white">
                                     <Select.Value />
                                     <Select.Indicator />
                                 </Select.Trigger>
                                 <Select.Popover>
-                                    <ListBox>
-                                        <ListBox.Item id="Private Suite" textValue="Private Suite">
-                                            Private Suite
-                                            <ListBox.ItemIndicator />
-                                        </ListBox.Item>
-                                        <ListBox.Item id="Media Room" textValue="Media Room">
-                                            Media Room
-                                            <ListBox.ItemIndicator />
-                                        </ListBox.Item>
-                                        <ListBox.Item id="Individual Pod" textValue="Individual Pod">
-                                            Individual Pod
-                                            <ListBox.ItemIndicator />
-                                        </ListBox.Item>
-                                        <ListBox.Item id="Research Cell" textValue="Research Cell">
-                                            Research Cell
-                                            <ListBox.ItemIndicator />
-                                        </ListBox.Item>
-                                        <ListBox.Item id="Conference Hall" textValue="Conference Hall">
-                                            Conference Hall
-                                            <ListBox.ItemIndicator />
-                                        </ListBox.Item>
-                                        <ListBox.Item id="Cozy Alcove" textValue="Cozy Alcove">
-                                            Cozy Alcove
-                                            <ListBox.ItemIndicator />
-                                        </ListBox.Item>
+                                    <ListBox className="bg-gray-800 text-white rounded-xl">
+                                        <ListBox.Item id="Private Suite" textValue="Private Suite">Private Suite</ListBox.Item>
+                                        <ListBox.Item id="Media Room" textValue="Media Room">Media Room</ListBox.Item>
+                                        <ListBox.Item id="Individual Pod" textValue="Individual Pod">Individual Pod</ListBox.Item>
+                                        <ListBox.Item id="Research Cell" textValue="Research Cell">Research Cell</ListBox.Item>
+                                        <ListBox.Item id="Conference Hall" textValue="Conference Hall">Conference Hall</ListBox.Item>
+                                        <ListBox.Item id="Cozy Alcove" textValue="Cozy Alcove">Cozy Alcove</ListBox.Item>
                                     </ListBox>
                                 </Select.Popover>
                             </Select>
                         </div>
+                    </div>
 
-                        {/* Price */}
+                    {/* SECTION 2: Numeric Specifications */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 bg-gray-950/40 p-4 rounded-2xl border border-gray-800/60">
                         <TextField name="price" type="number" isRequired>
-                            <Label className='text-white'>Price (USD)</Label>
-                            <Input
-                                type="number"
-                                placeholder="30"
-                                className="rounded-2xl"
-                            />
-                            <FieldError />
+                            <Label className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1.5 block">Hourly Price (USD)</Label>
+                            <Input type="number" placeholder="30" className="rounded-xl bg-gray-950 text-white" />
+                            <FieldError className="text-rose-500 text-xs mt-1" />
                         </TextField>
 
-                        {/* Location */}
                         <TextField name="capacity" isRequired>
-                            <Label className='text-white'>Capacity</Label>
-                            <Input placeholder="12-15 People" className="rounded-2xl" />
-                            <FieldError />
+                            <Label className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1.5 block">Seat Capacity</Label>
+                            <Input placeholder="12-15 People" className="rounded-xl bg-gray-950 text-white" />
+                            <FieldError className="text-rose-500 text-xs mt-1" />
                         </TextField>
 
-                        {/* Rating */}
                         <TextField name="rating" type="number" isRequired>
-                            <Label className='text-white'>Rating</Label>
-                            <Input
-                                type="number"
-                                placeholder="4.5"
-                                className="rounded-2xl"
-                            />
-                            <FieldError />
+                            <Label className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1.5 block">Initial Rating</Label>
+                            <Input type="number" step="0.1" placeholder="4.5" className="rounded-xl bg-gray-950 text-white" />
+                            <FieldError className="text-rose-500 text-xs mt-1" />
                         </TextField>
+                    </div>
 
-                        {/* Image URL - Removed preview */}
-                        <div className="md:col-span-2">
-                            <TextField name="image" isRequired>
-                                <Label className='text-white'>Image URL</Label>
-                                <Input
-                                    type="url"
-                                    placeholder="https://example.com/ibr.jpg"
-                                    className="rounded-2xl"
-                                />
-                                <FieldError />
+                    {/* SECTION 3: Amenities Utilities Array Grid */}
+                    <div className="border-t border-gray-800 pt-5">
+                        <Label className="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-3 block">
+                            Included Utilities & Amenities (Exactly 4)
+                        </Label>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <TextField name="amenities[]" isRequired>
+                                <Input placeholder="4K Display" className="rounded-xl bg-gray-950 text-white" />
                             </TextField>
-                        </div>
-
-                        {/* Description */}
-                        <div className="md:col-span-2">
-                            <TextField name="description" isRequired>
-                                <Label className='text-white'>Description</Label>
-                                <TextArea
-                                    placeholder="Describe the Study Room..."
-                                    className="rounded-3xl"
-                                />
-                                <FieldError />
+                            <TextField name="amenities[]" isRequired>
+                                <Input placeholder="Glass Board" className="rounded-xl bg-gray-950 text-white" />
+                            </TextField>
+                            <TextField name="amenities[]" isRequired>
+                                <Input placeholder="Soundproofing" className="rounded-xl bg-gray-950 text-white" />
+                            </TextField>
+                            <TextField name="amenities[]" isRequired>
+                                <Input placeholder="Power Hub" className="rounded-xl bg-gray-950 text-white" />
                             </TextField>
                         </div>
                     </div>
 
-                    {/* Buttons */}
+                    {/* SECTION 4: Media & Markdown Descriptions */}
+                    <div className="space-y-5 border-t border-gray-800 pt-5">
+                        <TextField name="image" isRequired>
+                            <Label className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1.5 block">Display Image URL</Label>
+                            <Input type="url" placeholder="https://unsplash.com" className="rounded-xl bg-gray-950 text-white" />
+                            <FieldError className="text-rose-500 text-xs mt-1" />
+                        </TextField>
 
+                        <TextField name="description" isRequired>
+                            <Label className="text-gray-300 text-xs font-semibold uppercase tracking-wider mb-1.5 block">Overview Description</Label>
+                            <TextArea placeholder="Describe room highlights, setups, environment textures, or hardware configurations..." className="rounded-xl bg-gray-950 min-h-25 text-white" />
+                            <FieldError className="text-rose-500 text-xs mt-1" />
+                        </TextField>
+                    </div>
+
+                    {/* Submit Button Block */}
                     <Button
                         type="submit"
-                        variant="outline"
-                        className=" rounded-none w-full bg-cyan-500 text-white"
+                        isDisabled={isSubmitting}
+                        className="w-full bg-[#069494] hover:bg-[#057a7a] active:scale-[0.99] text-white font-bold py-4 text-base rounded-xl shadow-lg shadow-teal-950/20 transition-all mt-4"
                     >
-                        Add Study Room
+                        {isSubmitting ? 'Publishing Workspace...' : 'Publish Study Room Space'}
                     </Button>
                 </form>
             </Card>
@@ -158,22 +172,3 @@ const AddRoomPage = () => {
 };
 
 export default AddRoomPage;
-
-// {/* Duration */ }
-// <TextField name="duration" isRequired>
-//     <Label className='text-white'>Duration</Label>
-//     <Input
-//         placeholder="7 Days / 6 Nights"
-//         className="rounded-2xl"
-//     />
-//     <FieldError />
-// </TextField>
-
-// {/* Departure Date */ }
-// <div className="md:col-span-2">
-//     <TextField name="departureDate" type="date" isRequired>
-//         <Label className='text-white'>Departure Date</Label>
-//         <Input type="date" className="rounded-2xl" />
-//         <FieldError />
-//     </TextField>
-// </div>

@@ -7,85 +7,14 @@ export const metadata = {
   description: 'View premium study room configurations, scheduling requirements, and time conflicts.'
 }
 
-const roomsData = [
-  {
-    "id": 1,
-    "name": "Elite Quad Study Suite",
-    "location": "Central Library - 3rd Floor",
-    "price": 15,
-    "rating": 4.9,
-    "capacity": "4-6 People",
-    "amenities": ["4K Presentation Monitor", "Glass Whiteboard", "Acoustic Insulation", "Type-C Power Hub"],
-    "description": "Quiet, soundproof suite optimized for collaborative group work, presentations, or heavy coding blocks. Outfitted with high-speed corporate grade Wi-Fi and modular seating arrangements.",
-    "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "category": "Private Suite"
-  },
-  {
-    "id": 2,
-    "name": "Collaborative Media Hub",
-    "location": "North Wing - 1st Floor",
-    "price": 25,
-    "rating": 4.8,
-    "capacity": "8-10 People",
-    "amenities": ["Dual Display Monitors", "Wireless Screen Casting", "Surround Sound Speakers", "Direct Ethernet LAN"],
-    "description": "Perfect for large group projects and interactive workshops. Features high-speed network connections, multiple casting interfaces, and a dry-erase surface wall.",
-    "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "category": "Media Room"
-  },
-  {
-    "id": 3,
-    "name": "Solo Focus Pod",
-    "location": "Law Library - Quiet Zone",
-    "price": 8,
-    "rating": 4.7,
-    "capacity": "1 Person",
-    "amenities": ["Ergonomic Task Chair", "Dimmable Focus Desk Light", "Noise-Canceling Panels", "AC Power Outlet"],
-    "description": "Ergonomic workspace tailored specifically for intensive individual research, online tests, or undisturbed reading blocks. Located inside the strict zero-noise sector.",
-    "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "category": "Individual Pod"
-  },
-  {
-    "id": 4,
-    "name": "Postgrad Research Cell",
-    "location": "Main Library - Level 4",
-    "price": 12,
-    "rating": 4.6,
-    "capacity": "2 People",
-    "amenities": ["4K Presentation Monitor", "Glass Whiteboard", "Acoustic Insulation", "Type-C Power Hub"],
-    "description": "Designed for long focus sessions. Features dual desktop monitors and access to reference material stacks.",
-    "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "category": "Research Cell"
-  },
-  {
-    "id": 5,
-    "name": "Innovation Brainstorm Room",
-    "location": "Engineering Lab - Annex B",
-    "price": 30,
-    "rating": 4.9,
-    "capacity": "12-15 People",
-    "amenities": ["Dual Display Monitors", "Wireless Screen Casting", "Surround Sound Speakers", "Direct Ethernet LAN"],
-    "description": "Large workspace featuring premium video conferencing gear, wrap-around whiteboards, and high-tier routers.",
-    "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "category": "Conference Hall"
-  },
-  {
-    "id": 6,
-    "name": "Silent Reading Alcove",
-    "location": "Old East Wing - Vault Room",
-    "price": 6,
-    "rating": 4.5,
-    "capacity": "1 Person",
-    "amenities": ["Ergonomic Task Chair", "Dimmable Focus Desk Light", "Noise-Canceling Panels", "AC Power Outlet"],
-    "description": "A cozy, ambient spot featuring natural classic window illumination. Ideal for undistracted book reviews.",
-    "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    "category": "Cozy Alcove"
-  }
-];
-
 const RoomDetails = async ({ params }) => {
-  // Swapped friendId to match a cleaner folder name structure like /rooms/[roomId]
-  const { roomId } = await params;
-  const room = roomsData.find((r) => r.id === Number(roomId)) || roomsData[0]; // Fallback to first room if undefined
+  const {roomId} = await params;
+  const res = await fetch(`http://localhost:5000/rooms/${roomId}`);
+  const room = await res.json();
+  // 3. Fallback handle if the specific room does not exist
+  if (!room) {
+    return <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">Room not found.</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6 md:p-12 font-sans">
