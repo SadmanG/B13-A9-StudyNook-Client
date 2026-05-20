@@ -4,15 +4,9 @@ import Link from 'next/link';
 import React from 'react';
 import userAvatar from '@/assets/user.png';
 import NavLink from './NavLink';
-import { FaGoogle } from 'react-icons/fa';
 import { authClient } from "@/lib/auth-client"
 
 const Navbar = () => {
-    const handleGoogleSignIn = async () => {
-        const data = await authClient.signIn.social({
-            provider: "google",
-        });
-    };
     const { data: session, isPending } = authClient.useSession();
     const user = session?.user;
     return (
@@ -39,7 +33,6 @@ const Navbar = () => {
                                     <div className='flex flex-col'>
                                         <Link href={'/register'}><button className='btn mr-4 bg-blue-500 text-white'>Register</button></Link>
                                         <Link href={'/login'}><button className='btn mr-4 bg-green-500 text-white'>Login</button></Link>
-                                        <button className='btn border-blue-500 text-blue-500' onClick={handleGoogleSignIn}><FaGoogle /> Login with Google</button>
                                     </div>
                                 )}
                         </li>
@@ -66,7 +59,6 @@ const Navbar = () => {
                             <div className='flex'>
                                 <Link href={'/register'}><button className='btn mr-4 bg-blue-500 text-white border-black'>Register</button></Link>
                                 <Link href={'/login'}><button className='btn mr-4 bg-green-500 text-white border-black'>Login</button></Link>
-                                <button className='btn border-blue-500 text-blue-500' onClick={handleGoogleSignIn}><FaGoogle /> Login with Google</button>
                             </div>
                         )}
                 </div>
