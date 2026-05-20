@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import { FaStar, FaUsers, FaRegClock, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa';
 import { Button } from '@heroui/react';
+import { TrashBin } from '@gravity-ui/icons';
+import { EditModal } from '@/components/shared/EditModal';
 
 export const metadata = {
   title: 'StudyNook | Room Details',
@@ -91,12 +93,20 @@ const RoomDetails = async ({ params }) => {
             {/* Native Touch-Safe HeroUI Action Button */}
             <Button
               className="bg-[#069494] hover:bg-[#057a7a] text-white font-bold text-lg px-8 py-6 rounded-xl shadow-lg shadow-teal-950/20 active:scale-98 transition-all"
-              startContent={<FaRegClock className="text-xl" />}
             >
+              <FaRegClock className="text-xl" />
               Reserve Timeslot
             </Button>
           </div>
-
+          <div className='mt-4 flex justify-between'>
+            <EditModal/>
+            <Button
+              className="bg-red-500 hover:bg-red-600 text-white font-bold text-lg px-8 py-6 rounded-xl shadow-lg shadow-teal-950/20 active:scale-98 transition-all"
+            >
+              <TrashBin className="text-xl" />
+              Delete Room
+            </Button>
+          </div>
         </div>
       </div>
     </div>

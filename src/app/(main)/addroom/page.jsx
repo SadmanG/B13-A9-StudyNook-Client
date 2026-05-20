@@ -1,11 +1,8 @@
 'use client'
 import { FieldError, Input, Label, TextField, Select, ListBox, TextArea, Button, Card } from '@heroui/react';
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React from 'react';
 
 const AddRoomPage = () => {
-    const router = useRouter();
-    const [isSubmitting, setIsSubmitting] = useState(false);
     const onSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -22,29 +19,13 @@ const AddRoomPage = () => {
 
         delete studyRoom['amenities[]'];
 
-        try {
-            const res = await fetch('http://localhost:5000/rooms', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(studyRoom)
-            });
-
-            if (res.ok) {
-                // 3. Trigger immediate routing to the rooms gallery path
-                router.refresh();
-                router.push('/rooms');
-                window.location.replace = '/rooms';
-            } else {
-                alert('Failed to submit study room data.');
-                setIsSubmitting(false);
-            }
-        } catch (error) {
-            console.error("Submission error:", error);
-            alert('An unexpected error occurred.');
-            setIsSubmitting(false);
-        }
+        const res = await fetch('http://localhost:5000/rooms', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(studyRoom)
+        });
     };
 
     return (
@@ -124,7 +105,7 @@ const AddRoomPage = () => {
                     {/* SECTION 3: Amenities Utilities Array Grid */}
                     <div className="border-t border-gray-800 pt-5">
                         <Label className="text-cyan-400 text-xs font-bold uppercase tracking-wider mb-3 block">
-                            Included Utilities & Amenities (Exactly 4)
+                            Included Utilities & Amenities
                         </Label>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <TextField name="amenities[]" isRequired>
@@ -160,10 +141,9 @@ const AddRoomPage = () => {
                     {/* Submit Button Block */}
                     <Button
                         type="submit"
-                        isDisabled={isSubmitting}
                         className="w-full bg-[#069494] hover:bg-[#057a7a] active:scale-[0.99] text-white font-bold py-4 text-base rounded-xl shadow-lg shadow-teal-950/20 transition-all mt-4"
                     >
-                        {isSubmitting ? 'Publishing Workspace...' : 'Publish Study Room Space'}
+                        Publish Study Room Space
                     </Button>
                 </form>
             </Card>
