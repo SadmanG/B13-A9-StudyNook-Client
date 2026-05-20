@@ -4,7 +4,7 @@ import { Envelope } from "@gravity-ui/icons";
 import { Button, Input, Label, Modal, Surface, TextField, FieldError, Select, ListBox, TextArea } from "@heroui/react";
 import { BiEdit } from "react-icons/bi";
 
-export function EditModal() {
+export function EditModal({ room }) {
     const onSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
@@ -21,13 +21,13 @@ export function EditModal() {
 
         delete studyRoom['amenities[]'];
 
-        // const res = await fetch('http://localhost:5000/rooms', {
-        //     method: 'POST',
-        //     headers: {
-        //         'content-type': 'application/json'
-        //     },
-        //     body: JSON.stringify(studyRoom)
-        // });
+        const res = await fetch(`http://localhost:5000/rooms/${room._id}`, {
+            method: 'PATCH',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(studyRoom)
+        });
     };
     return (
         <Modal>
@@ -39,7 +39,7 @@ export function EditModal() {
             </Button>
             <Modal.Backdrop>
                 <Modal.Container placement="auto">
-                    <Modal.Dialog className="sm:max-w-md">
+                    <Modal.Dialog className="sm:max-w-xl">
                         <Modal.CloseTrigger />
                         <Modal.Header>
                             <Modal.Heading>Edit Current Study Room</Modal.Heading>
@@ -50,21 +50,21 @@ export function EditModal() {
                                     {/* SECTION 1: Core Identification */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                         <div className="sm:col-span-2">
-                                            <TextField name="name" isRequired>
+                                            <TextField defaultValue={room.name} name="name" isRequired>
                                                 <Label className="text-xs font-semibold uppercase tracking-wider mb-1.5 block">Study Room Name</Label>
                                                 <Input placeholder="Innovation Brainstorm Room" className="rounded-xl bg-gray-950 text-white" />
                                                 <FieldError className="text-rose-500 text-xs mt-1" />
                                             </TextField>
                                         </div>
 
-                                        <TextField name="location" isRequired>
+                                        <TextField defaultValue={room.location} name="location" isRequired>
                                             <Label className="text-xs font-semibold uppercase tracking-wider mb-1.5 block">Location / Placement</Label>
                                             <Input placeholder="Engineering Lab - 2nd Floor" className="rounded-xl bg-gray-950 text-white" />
                                             <FieldError className="text-rose-500 text-xs mt-1" />
                                         </TextField>
 
                                         <div>
-                                            <Select name="category" isRequired className="w-full" placeholder="Select category">
+                                            <Select defaultValue={room.category} name="category" isRequired className="w-full" placeholder="Select category">
                                                 <Label className="text-xs font-semibold uppercase tracking-wider mb-1.5 block">Category</Label>
                                                 <Select.Trigger className="rounded-xl bg-gray-950 border-gray-800 text-white">
                                                     <Select.Value />
@@ -86,19 +86,19 @@ export function EditModal() {
 
                                     {/* SECTION 2: Numeric Specifications */}
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                                        <TextField name="price" type="number" isRequired>
+                                        <TextField defaultValue={room.price} name="price" type="number" isRequired>
                                             <Label className="text-xs font-semibold uppercase tracking-wider mb-1.5 block">Hourly Price (USD)</Label>
                                             <Input type="number" placeholder="30" className="rounded-xl bg-gray-950 text-white" />
                                             <FieldError className="text-rose-500 text-xs mt-1" />
                                         </TextField>
 
-                                        <TextField name="capacity" isRequired>
+                                        <TextField defaultValue={room.capacity} name="capacity" isRequired>
                                             <Label className="text-xs font-semibold uppercase tracking-wider mb-1.5 block">Seat Capacity</Label>
                                             <Input placeholder="12-15 People" className="rounded-xl bg-gray-950 text-white" />
                                             <FieldError className="text-rose-500 text-xs mt-1" />
                                         </TextField>
 
-                                        <TextField name="rating" type="number" isRequired>
+                                        <TextField defaultValue={room.rating} name="rating" type="number" isRequired>
                                             <Label className="text-xs font-semibold uppercase tracking-wider mb-1.5 block">Initial Rating</Label>
                                             <Input type="number" step="0.1" placeholder="4.5" className="rounded-xl bg-gray-950 text-white" />
                                             <FieldError className="text-rose-500 text-xs mt-1" />
@@ -111,16 +111,16 @@ export function EditModal() {
                                             Included Utilities & Amenities
                                         </Label>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <TextField name="amenities[]" isRequired>
+                                            <TextField defaultValue={room.amenities[0]} name="amenities[]" isRequired>
                                                 <Input placeholder="4K Display" className="rounded-xl bg-gray-950 text-white" />
                                             </TextField>
-                                            <TextField name="amenities[]" isRequired>
+                                            <TextField defaultValue={room.amenities[1]} name="amenities[]" isRequired>
                                                 <Input placeholder="Glass Board" className="rounded-xl bg-gray-950 text-white" />
                                             </TextField>
-                                            <TextField name="amenities[]" isRequired>
+                                            <TextField defaultValue={room.amenities[2]} name="amenities[]" isRequired>
                                                 <Input placeholder="Soundproofing" className="rounded-xl bg-gray-950 text-white" />
                                             </TextField>
-                                            <TextField name="amenities[]" isRequired>
+                                            <TextField defaultValue={room.amenities[3]} name="amenities[]" isRequired>
                                                 <Input placeholder="Power Hub" className="rounded-xl bg-gray-950 text-white" />
                                             </TextField>
                                         </div>
@@ -128,34 +128,30 @@ export function EditModal() {
 
                                     {/* SECTION 4: Media & Markdown Descriptions */}
                                     <div className="space-y-5 border-t border-gray-800 pt-5">
-                                        <TextField name="image" isRequired>
+                                        <TextField defaultValue={room.image} name="image" isRequired>
                                             <Label className="text-xs font-semibold uppercase tracking-wider mb-1.5 block">Display Image URL</Label>
                                             <Input type="url" placeholder="https://unsplash.com" className="rounded-xl bg-gray-950 text-white" />
                                             <FieldError className="text-rose-500 text-xs mt-1" />
                                         </TextField>
 
-                                        <TextField name="description" isRequired>
+                                        <TextField defaultValue={room.description} name="description" isRequired>
                                             <Label className="text-xs font-semibold uppercase tracking-wider mb-1.5 block">Overview Description</Label>
                                             <TextArea placeholder="Describe room highlights, setups, environment textures, or hardware configurations..." className="rounded-xl bg-gray-950 min-h-25 text-white" />
                                             <FieldError className="text-rose-500 text-xs mt-1" />
                                         </TextField>
                                     </div>
-
-                                    {/* Submit Button Block */}
-                                    <Button
-                                        type="submit"
-                                        className="w-full bg-amber-600 hover:bg-amber-700 active:scale-[0.99] text-white font-bold py-4 text-base rounded-xl shadow-lg shadow-teal-950/20 transition-all mt-4"
-                                    >
-                                        Publish Edited Study Room
-                                    </Button>
+                                    <Modal.Footer>
+                                        {/* Submit Button Block */}
+                                        <Button
+                                            type="submit"
+                                            className="w-full bg-amber-600 hover:bg-amber-700 active:scale-[0.99] text-white font-bold py-4 text-base rounded-xl shadow-lg shadow-teal-950/20 transition-all mt-4"
+                                        >
+                                            Publish Edited Study Room
+                                        </Button>
+                                    </Modal.Footer>
                                 </form>
                             </Surface>
                         </Modal.Body>
-                        <Modal.Footer>
-                            <Button slot="close" variant="danger">
-                                Cancel
-                            </Button>
-                        </Modal.Footer>
                     </Modal.Dialog>
                 </Modal.Container>
             </Modal.Backdrop>

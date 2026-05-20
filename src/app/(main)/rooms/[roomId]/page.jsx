@@ -99,7 +99,7 @@ const RoomDetails = async ({ params }) => {
             </Button>
           </div>
           <div className='mt-4 flex justify-between'>
-            <EditModal/>
+            <EditModal room={room}/>
             <Button
               className="bg-red-500 hover:bg-red-600 text-white font-bold text-lg px-8 py-6 rounded-xl shadow-lg shadow-teal-950/20 active:scale-98 transition-all"
             >
