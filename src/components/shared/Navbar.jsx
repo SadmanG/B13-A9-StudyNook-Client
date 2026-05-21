@@ -5,6 +5,7 @@ import React from 'react';
 import userAvatar from '@/assets/user.png';
 import NavLink from './NavLink';
 import { authClient } from "@/lib/auth-client"
+import { Avatar } from '@heroui/react';
 
 const Navbar = () => {
     const { data: session, isPending } = authClient.useSession();
@@ -22,11 +23,9 @@ const Navbar = () => {
                         <li><NavLink href={'/home'}>Home</NavLink></li>
                         <li><NavLink href={'/rooms'}>All Rooms</NavLink></li>
                         <li><NavLink href={'/addroom'}>Add A Room</NavLink></li>
-                        <li><NavLink href={'/myprofile'}>My Profile</NavLink></li>
                         <li>
                             {isPending ? (<span className="loading loading-spinner loading-lg"></span>) : user ? (<div className='flex flex-col items-center gap-2'>
-                                <h2>Hello, {user.name}</h2>
-                                <Image src={user.image || userAvatar} alt="User Avatar" width={60} height={60}></Image>
+                                <NavLink href={'/myprofile'}><Image src={user.image || userAvatar} alt="User Avatar" width={60} height={60}></Image></NavLink>
                                 <button className='btn mr-4 bg-red-500 text-white' onClick={async () => await authClient.signOut()}>Logout</button>
                             </div>) :
                                 (
@@ -45,14 +44,15 @@ const Navbar = () => {
                     <li className='text-white'><NavLink href={'/home'}>Home</NavLink></li>
                     <li className='text-white'><NavLink href={'/rooms'}>All Rooms</NavLink></li>
                     <li className='text-white'><NavLink href={'/addroom'}>Add A Room</NavLink></li>
-                    <li className='text-white'><NavLink href={'/myprofile'}>My Profile</NavLink></li>
                 </ul>
             </div>
             <div className="navbar-end">
                 <div className='hidden md:block'>
                     {isPending ? (<span className="loading loading-spinner loading-lg"></span>) : user ? (<div className='flex items-center gap-2'>
-                        <h2 className='text-white'>Hello, {user.name}</h2>
-                        <Image src={user.image || userAvatar} alt="User Avatar" width={60} height={60}></Image>
+                        <NavLink href={'/myprofile'}><Avatar>
+                            <Avatar.Image referrerPolicy='no-referrer' alt={user?.name} src={user?.image} />
+                            <Avatar.Fallback>{user.name.charAt(0)}</Avatar.Fallback>
+                        </Avatar></NavLink>
                         <button className='btn mr-4 bg-red-500 text-white' onClick={async () => await authClient.signOut()}>Logout</button>
                     </div>) :
                         (

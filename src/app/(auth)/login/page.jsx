@@ -1,9 +1,11 @@
 'use client'
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
     const handleGoogleSignIn = async () => {
@@ -23,14 +25,17 @@ const LoginPage = () => {
 
     const [isShowPassword, setIsShowPassword] = useState(false);
 
-    const handleLoginFunc = async (data) => {
+    const handleLoginFunc = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+
+        const user = Object.fromEntries(formData.entries());
         // console.log(data);
 
         const { data: res, error } = await authClient.signIn.email({
-            email: data.email, // required
-            password: data.password, // required
-            rememberMe: true,
-            callbackURL: "/",
+            email: user.email, // required
+            password: user.password, // required
+            rememberMe: true
         });
         // console.log(res, error);
         if (error) {
@@ -38,6 +43,7 @@ const LoginPage = () => {
         }
         if (res) {
             alert("SignIn was Successful!");
+            redirect('/');
         }
     }
 
@@ -53,7 +59,7 @@ const LoginPage = () => {
         <div className="container mx-auto min-h-[80vh] flex justify-center items-center bg-sky-300 p-8">
             <div className="p-4 rounded-xl bg-gray-900">
                 <h2 className="text-white font-bold text-3xl text-center mb-6">Login your Account</h2>
-                <form className="space-y-4" onSubmit={handleSubmit(handleLoginFunc)}>
+                <form className="space-y-4" onSubmit={handleLoginFunc}>
                     <fieldset className="fieldset">
                         <legend className="text-white fieldset-legend">Email Address</legend>
                         <input type="email" className="input" placeholder="Enter your Email Address"
@@ -72,7 +78,7 @@ const LoginPage = () => {
                     <button className="btn w-full bg-green-500 border-black text-white">Login</button>
                 </form>
                 <p className="text-white mt-6 border-t border-gray-800 pt-5 flex items-center justify-center">OR</p>
-                <button className='btn border-blue-500 text-blue-500 w-full mt-4' onClick={handleGoogleSignIn}><FaGoogle /> Login with Google</button>
+                <button className='btn border-blue-500 text-blue-500 w-full mt-4' onClick={handleGoogleSignIn}><FcGoogle /> Login with Google</button>
                 <p className="text-white mt-6 border-t border-gray-800 pt-5">Don&apos;t have an account? <Link href={"/register"} className="text-blue-600">Register Now</Link></p>
             </div>
         </div>

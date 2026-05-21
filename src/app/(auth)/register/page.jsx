@@ -1,16 +1,13 @@
 'use client'
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaEye, FaEyeSlash, FaGoogle } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 const RegisterPage = () => {
-    const handleGoogleSignIn = async () => {
-        const data = await authClient.signIn.social({
-            provider: "google",
-        });
-    };
     const {
         register,               // Name(s) of input
         handleSubmit,           // Handle function
@@ -23,17 +20,26 @@ const RegisterPage = () => {
 
     const [isShowPassword, setIsShowPassword] = useState(false);
 
-    const handleRegisterFunc = async (data) => {
+    const handleGoogleSignIn = async () => {
+        const data = await authClient.signIn.social({
+            provider: "google",
+        });
+    };
+
+    const handleRegisterFunc = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+
+        const user = Object.fromEntries(formData.entries());
         // console.log(data);
-        const { name, photo, email, password } = data;
+        // const { name, photo, email, password } = data;
         // console.log(name, photo, email, password);
 
         const { data: res, error } = await authClient.signUp.email({
-            name: name, // required
-            email: email, // required
-            password: password, // required
-            image: photo,
-            callbackURL: "/",
+            name: user.name, // required
+            email: user.email, // required
+            password: user.password, // required
+            image: user.image
         });
         // console.log(res, error);
         if (error) {
@@ -41,6 +47,7 @@ const RegisterPage = () => {
         }
         if (res) {
             alert("SignUp was Successful!");
+            redirect('/');
         }
     }
 
@@ -56,7 +63,7 @@ const RegisterPage = () => {
         <div className="container mx-auto min-h-[80vh] flex justify-center items-center bg-sky-300 p-8">
             <div className="p-4 rounded-xl bg-gray-900">
                 <h2 className="text-white font-bold text-3xl text-center mb-6">Register an Account</h2>
-                <form className="space-y-4" onSubmit={handleSubmit(handleRegisterFunc)}>
+                <form className="space-y-4" onSubmit={handleRegisterFunc}>
                     <fieldset className="fieldset">
                         <legend className="text-white fieldset-legend">Your Name</legend>
                         <input type="text" className="input" placeholder="Enter your Username"
@@ -66,8 +73,8 @@ const RegisterPage = () => {
                     <fieldset className="fieldset">
                         <legend className="text-white fieldset-legend">Photo URL</legend>
                         <input type="text" className="input" placeholder="Enter your Photo URL"
-                            {...register("photo", { required: "Enter Your Photo URL!" })} />
-                        {errors.photo && <p className="text-red-600">{errors.photo.message}</p>}
+                            {...register("image", { required: "Enter Your Photo URL!" })} />
+                        {errors.image && <p className="text-red-600">{errors.image.message}</p>}
                     </fieldset>
                     <fieldset className="fieldset">
                         <legend className="text-white fieldset-legend">Email Address</legend>
@@ -86,7 +93,7 @@ const RegisterPage = () => {
                     <button className="btn w-full bg-blue-500 border-black text-white">Register</button>
                 </form>
                 <p className="text-white mt-6 border-t border-gray-800 pt-5 flex items-center justify-center">OR</p>
-                <button className='btn border-blue-500 text-blue-500 w-full mt-4' onClick={handleGoogleSignIn}><FaGoogle /> Login with Google</button>
+                <button className='btn border-blue-500 text-blue-500 w-full mt-4' onClick={handleGoogleSignIn}><FcGoogle /> Login with Google</button>
                 <p className="text-white mt-6 border-t border-gray-800 pt-5">Already have an account? <Link href={"/login"} className="text-green-600">Login Now</Link></p>
             </div>
         </div>
