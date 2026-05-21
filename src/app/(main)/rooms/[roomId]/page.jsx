@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { FaStar, FaUsers, FaRegClock, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa';
-import { Button } from '@heroui/react';
+import { FaStar, FaUsers, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa';
 import { EditModal } from '@/components/shared/EditModal';
 import { DeleteRoomAlert } from '@/components/shared/DeleteRoomAlert';
+import { BookNowModal } from '@/components/shared/BookNowModal';
 
 export const metadata = {
   title: 'StudyNook | Room Details',
@@ -91,12 +91,7 @@ const RoomDetails = async ({ params }) => {
             </div>
 
             {/* Native Touch-Safe HeroUI Action Button */}
-            <Button
-              className="bg-[#069494] hover:bg-[#057a7a] text-white font-bold text-lg px-8 py-6 rounded-xl shadow-lg shadow-teal-950/20 active:scale-98 transition-all"
-            >
-              <FaRegClock className="text-xl" />
-              Reserve Timeslot
-            </Button>
+            <BookNowModal room={room}/>
           </div>
           <div className='mt-4 flex justify-between'>
             <EditModal room={room}/>
