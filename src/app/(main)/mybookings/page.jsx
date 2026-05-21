@@ -1,8 +1,8 @@
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { Button, Card } from "@heroui/react";
+import { Card } from "@heroui/react";
 import Image from "next/image";
-import { TrashBin } from "@gravity-ui/icons";
+import { BookingCancelAlert } from "@/components/shared/BookingCancelAlert";
 
 const MyBookingsPage = async () => {
     const session = await auth.api.getSession({
@@ -80,19 +80,13 @@ const MyBookingsPage = async () => {
                                             Date: {formatDate(booking.bookedDate)}
                                         </span>
                                     </div>
-                                    <Button
-                                        size="sm"
-                                        className="bg-red-500/10 hover:bg-red-500/20 text-red-400 text-xs font-medium px-3 py-1.5 h-8 rounded-lg transition-colors border border-red-500/20"
-                                    >
-                                        <TrashBin/>
-                                        Cancel
-                                    </Button>
+                                    <BookingCancelAlert booking={booking}/>
                                 </Card.Footer>
                             </div>
                         </Card>
                     ))
                 ) : (
-                    <p className="text-sm text-gray-500 text-center py-8">No bookings found.</p>
+                    <p className="text-sm text-gray-500 text-center py-8">You have Booked nothing.</p>
                 )}
             </div>
         </div>
