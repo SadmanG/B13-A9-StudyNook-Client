@@ -4,6 +4,7 @@ import { authClient } from "@/lib/auth-client";
 import { Button, Input, Label, Modal, Surface, TextField, FieldError } from "@heroui/react";
 import { redirect } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { FaRegClock } from "react-icons/fa";
 
 export function BookNowModal({ room }) {
@@ -29,18 +30,10 @@ export function BookNowModal({ room }) {
 
         // delete studyRoom['amenities[]'];
 
-        // const res = await fetch(`http://localhost:5000/rooms/${room._id}`, {
-        //     method: 'PATCH',
-        //     headers: {
-        //         'content-type': 'application/json'
-        //     },
-        //     body: JSON.stringify(studyRoom)
-        // });
-
         const bookedData = {
-            userId: user.id,
-            userImage: user.image,
-            userName: user.name,
+            userId: user?.id,
+            userImage: user?.image,
+            userName: user?.name,
             roomId: room._id,
             roomName: room.name,
             roomLocation: room.location,
@@ -51,7 +44,16 @@ export function BookNowModal({ room }) {
             bookedDate: new Date(bookedDate),
             duration: duration
         }
-        console.log(bookedData);
+
+        const res = await fetch('http://localhost:5000/bookings', {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(bookedData)
+        });
+        const data = await res.json();
+        toast.success(`You have Booked ${room.name} successfully!`)
 
         redirect('/rooms');
     };
