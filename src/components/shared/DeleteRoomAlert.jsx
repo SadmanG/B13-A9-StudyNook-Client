@@ -1,6 +1,4 @@
 "use client";
-
-import { authClient } from "@/lib/auth-client";
 import { TrashBin } from "@gravity-ui/icons";
 import { AlertDialog, Button } from "@heroui/react";
 import { redirect } from "next/navigation";
@@ -8,12 +6,10 @@ import { redirect } from "next/navigation";
 export function DeleteRoomAlert({room}) {
     const handleDelete = async (e) => {
         e.preventDefault();
-        const { data: tokenData } = await authClient.token();
         const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms/${room._id}`, {
             method: 'DELETE',
             headers: {
-                'content-type': 'application/json',
-                authorization: `Bearer ${tokenData?.token}`
+                'content-type': 'application/json'
             }
         });
         redirect('/rooms');

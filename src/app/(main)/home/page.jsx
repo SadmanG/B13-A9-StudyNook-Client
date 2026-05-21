@@ -2,18 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaFireAlt, FaStar, FaUsers, FaRegClock, FaMapMarkerAlt } from 'react-icons/fa';
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
 
 const HomePage = async () => {
-    const { token } = await auth.api.getToken({
-        headers: await headers(),
-    });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`, {
-        headers: {
-            authorization: `Bearer ${token}`
-        }
-    });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`);
     const rooms = await res.json();
 
     return (

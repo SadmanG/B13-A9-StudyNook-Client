@@ -16,19 +16,6 @@ export function BookNowModal({ room }) {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
         const duration = formData.get("duration");
-        // const formData = new FormData(e.currentTarget);
-
-        // const baseData = Object.fromEntries(formData.entries());
-        // const amenities = formData.getAll('amenities[]').filter(item => item.trim() !== '');
-
-        // const studyRoom = {
-        //     ...baseData,
-        //     price: Number(baseData.price),
-        //     rating: Number(baseData.rating),
-        //     amenities: amenities
-        // };
-
-        // delete studyRoom['amenities[]'];
 
         const bookedData = {
             userId: user?.id,
@@ -45,13 +32,10 @@ export function BookNowModal({ room }) {
             duration: duration
         }
 
-        const {data: tokenData} = await authClient.token();
-
         const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                authorization: `Bearer ${tokenData?.token}`
             },
             body: JSON.stringify(bookedData)
         });

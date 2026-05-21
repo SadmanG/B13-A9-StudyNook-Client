@@ -3,7 +3,6 @@ import { FieldError, Input, Label, TextField, Select, ListBox, TextArea, Button,
 import { redirect } from 'next/navigation';
 import toast from "react-hot-toast";
 import React from 'react';
-import { authClient } from '@/lib/auth-client';
 
 const AddRoomPage = () => {
     const onSubmit = async (e) => {
@@ -22,13 +21,10 @@ const AddRoomPage = () => {
 
         delete studyRoom['amenities[]'];
 
-        const { data: tokenData } = await authClient.token();
-
         const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                authorization: `Bearer ${tokenData?.token}`
             },
             body: JSON.stringify(studyRoom)
         });

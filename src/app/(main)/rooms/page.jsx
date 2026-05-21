@@ -1,5 +1,3 @@
-import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -11,14 +9,7 @@ export const metadata = {
 };
 
 const StudyRoomsPage = async () => {
-    const { token } = await auth.api.getToken({
-        headers: await headers(),
-    });
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`, {
-        headers: {
-            authorization: `Bearer ${token}`
-        }
-    });
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`);
     const rooms = await res.json();
     return (
         <div>
