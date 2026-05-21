@@ -3,6 +3,8 @@ import { FaStar, FaUsers, FaMapMarkerAlt, FaCheckCircle } from 'react-icons/fa';
 import { EditModal } from '@/components/shared/EditModal';
 import { DeleteRoomAlert } from '@/components/shared/DeleteRoomAlert';
 import { BookNowModal } from '@/components/shared/BookNowModal';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
 export const metadata = {
   title: 'StudyNook | Room Details',
@@ -11,7 +13,14 @@ export const metadata = {
 
 const RoomDetails = async ({ params }) => {
   const {roomId} = await params;
-  const res = await fetch(`http://localhost:5000/rooms/${roomId}`);
+  const {token} = await auth.api.getToken({
+    headers: await headers(),
+  });
+  const res = await fetch(`http://localhost:5000/rooms/${roomId}`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
   const room = await res.json();
   // 3. Fallback handle if the specific room does not exist
   if (!room) {

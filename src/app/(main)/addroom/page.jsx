@@ -1,7 +1,9 @@
 'use client'
 import { FieldError, Input, Label, TextField, Select, ListBox, TextArea, Button, Card } from '@heroui/react';
 import { redirect } from 'next/navigation';
+import toast from "react-hot-toast";
 import React from 'react';
+import { authClient } from '@/lib/auth-client';
 
 const AddRoomPage = () => {
     const onSubmit = async (e) => {
@@ -20,13 +22,18 @@ const AddRoomPage = () => {
 
         delete studyRoom['amenities[]'];
 
+        const {data: tokenData} = await authClient.token();
+
         const res = await fetch('http://localhost:5000/rooms', {
             method: 'POST',
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                authorization: `Bearer ${tokenData?.token}`
             },
             body: JSON.stringify(studyRoom)
         });
+        toast.success('You have Created a Study successfully!');
+        window.location.reload();
         redirect('/rooms');
     };
 
@@ -38,7 +45,7 @@ const AddRoomPage = () => {
                 {/* Clean Header Area */}
                 <div className="mb-8 border-b border-gray-800 pb-5">
                     <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                        Add New Study Room
+                        Add A New Study Room
                     </h1>
                     <p className="text-gray-400 text-sm mt-1">
                         Fill out the specifications below to register a new workspace configuration.

@@ -8,6 +8,9 @@ const MyBookingsPage = async () => {
     const session = await auth.api.getSession({
         headers: await headers()
     });
+    const { token } = await auth.api.getToken({
+        headers: await headers(),
+    });
     const user = session?.user;
 
     // Handle case where user is not logged in yet
@@ -15,7 +18,11 @@ const MyBookingsPage = async () => {
         return <div className="text-white p-8 text-center bg-gray-950 min-h-screen">Please log in to view your bookings.</div>;
     }
 
-    const res = await fetch(`http://localhost:5000/bookings/${user.id}`);
+    const res = await fetch(`http://localhost:5000/bookings/${user.id}`, {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    });
     const bookings = await res.json();
 
     const formatDate = (dateString) => {
@@ -36,7 +43,7 @@ const MyBookingsPage = async () => {
         <div className="bg-gray-950 min-h-screen p-6 flex flex-col items-center">
             {/* Column-wise Container: centered on page, cards stacked one by one */}
             <div className="w-full max-w-xl flex flex-col gap-4">
-                <h1 className="text-xl font-bold text-white mb-2 text-center md:text-left">My Bookings</h1>
+                <h1 className="text-xl font-bold text-white mb-2 text-center md:text-left">My Booked Study Rooms</h1>
 
                 {bookings && bookings.length > 0 ? (
                     bookings.map((booking) => (
@@ -80,7 +87,7 @@ const MyBookingsPage = async () => {
                                             Date: {formatDate(booking.bookedDate)}
                                         </span>
                                     </div>
-                                    <BookingCancelAlert booking={booking}/>
+                                    <BookingCancelAlert booking={booking} />
                                 </Card.Footer>
                             </div>
                         </Card>

@@ -2,43 +2,19 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaFireAlt, FaStar, FaUsers, FaRegClock, FaMapMarkerAlt } from 'react-icons/fa';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
 
-const StudyRoomsPage = () => {
-    const roomsData = [
-        {
-            "id": 1,
-            "name": "Elite Quad Study Suite",
-            "location": "Central Library - 3rd Floor",
-            "price": 15,
-            "rating": 4.9,
-            "capacity": "4-6 People",
-            "description": "Quiet, soundproof suite equipped with a 4K presentation monitor and whiteboard.",
-            "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            "category": "Private Suite"
-        },
-        {
-            "id": 2,
-            "name": "Collaborative Media Hub",
-            "location": "North Wing - 1st Floor",
-            "price": 25,
-            "rating": 4.8,
-            "capacity": "8-10 People",
-            "description": "Perfect for group projects. Features ultra-fast Wi-Fi, casting setups, and modular desks.",
-            "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            "category": "Media Room"
-        },
-        {
-            "id": 5,
-            "name": "Solo Focus Pod",
-            "location": "Law Library - Quiet Zone",
-            "price": 8,
-            "rating": 4.7,
-            "capacity": "1 Person",
-            "description": "Ergonomic seating with noise-canceling acoustics designed for intensive individual study.",
-            "image": "https://plus.unsplash.com/premium_photo-1703701579660-8481915a7991?q=80&w=1171&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-            "category": "Individual Pod"
+const HomePage = async () => {
+    const { token } = await auth.api.getToken({
+        headers: await headers(),
+    });
+    const res = await fetch('http://localhost:5000/rooms', {
+        headers: {
+            authorization: `Bearer ${token}`
         }
-    ];
+    });
+    const rooms = await res.json();
 
     return (
         <div>
@@ -55,9 +31,9 @@ const StudyRoomsPage = () => {
 
                     {/* Responsive Grid exactly like your original image structure */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {roomsData.map((room) => (
+                        {rooms.slice(-3).map((room) => (
                             // Removed DaisyUI 'card', replaced with raw Tailwind
-                            <div key={room.id} className="rounded-2xl overflow-hidden bg-sky-100 shadow-sm border border-sky-200/50 flex flex-col justify-between">
+                            <div key={room._id} className="rounded-2xl overflow-hidden bg-sky-100 shadow-sm border border-sky-200/50 flex flex-col justify-between">
                                 <div className="relative h-64 w-full">
                                     <Image
                                         src={room.image}
@@ -93,7 +69,7 @@ const StudyRoomsPage = () => {
                                             <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Hourly Rate</span>
                                             <p className='text-2xl font-extrabold text-[#1E3A8A]'>${room.price}/hr</p>
                                         </div>
-                                        <Link href={`/rooms/${room.id}`}>
+                                        <Link href={`/rooms/${room._id}`}>
                                             <button className='px-5 py-2.5 rounded-xl font-semibold text-white bg-[#069494] hover:bg-[#057a7a] transition-all duration-200 flex items-center gap-2 shadow-sm shadow-teal-900/10 active:scale-95'>
                                                 <FaRegClock /> Book Room
                                             </button>
@@ -111,4 +87,4 @@ const StudyRoomsPage = () => {
     );
 };
 
-export default StudyRoomsPage;
+export default HomePage;

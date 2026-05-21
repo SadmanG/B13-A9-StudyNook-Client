@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { Button, Input, Label, Modal, Surface, TextField, FieldError, Select, ListBox, TextArea } from "@heroui/react";
 import { redirect } from "next/navigation";
 import { BiEdit } from "react-icons/bi";
@@ -21,10 +22,13 @@ export function EditModal({ room }) {
 
         delete studyRoom['amenities[]'];
 
+        const { data: tokenData } = await authClient.token();
+
         const res = await fetch(`http://localhost:5000/rooms/${room._id}`, {
             method: 'PATCH',
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                authorization: `Bearer ${tokenData?.token}`
             },
             body: JSON.stringify(studyRoom)
         });
