@@ -24,7 +24,7 @@ export function EditModal({ room }) {
 
         const { data: tokenData } = await authClient.token();
 
-        const res = await fetch(`http://localhost:5000/rooms/${room._id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms/${room._id}`, {
             method: 'PATCH',
             headers: {
                 'content-type': 'application/json',

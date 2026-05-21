@@ -9,7 +9,7 @@ export function DeleteRoomAlert({room}) {
     const handleDelete = async (e) => {
         e.preventDefault();
         const { data: tokenData } = await authClient.token();
-        const res = await fetch(`http://localhost:5000/rooms/${room._id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms/${room._id}`, {
             method: 'DELETE',
             headers: {
                 'content-type': 'application/json',
