@@ -8,15 +8,19 @@ const MyBookingsPage = async () => {
     const session = await auth.api.getSession({
         headers: await headers()
     });
-    const { token } = await auth.api.getToken({
-        headers: await headers(),
-    });
+    // const { token } = await auth.api.getToken({
+    //     headers: await headers(),
+    // });
     const user = session?.user;
 
     // Handle case where user is not logged in yet
     if (!user) {
         return <div className="text-white p-8 text-center bg-gray-950 min-h-screen">Please log in to view your bookings.</div>;
     }
+
+    const { token } = await auth.api.getToken({
+        headers: await headers(),
+    });
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/bookings/${user.id}`, {
         headers: {
