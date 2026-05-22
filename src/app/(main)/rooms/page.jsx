@@ -9,7 +9,9 @@ export const metadata = {
 };
 
 const StudyRoomsPage = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms`, {
+        cache: "no-store"
+    });
     const rooms = await res.json();
     return (
         <div>
