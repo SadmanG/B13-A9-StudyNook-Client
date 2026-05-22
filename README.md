@@ -16,8 +16,8 @@ StudyNook is a specialized digital platform designed to streamline study space m
 
 ### 🛠️ Tech Stack
 
-* **Frontend:** React.js, Tailwind CSS *(or your chosen frontend tools)*
-* **Backend:** Node.js, Express.js
+* **Frontend:** Next.js, DaisyUI, HeroUI, Hot-Toast
+* **Backend:** Express.js
 * **Database:** MongoDB (via official MongoDB Node.js Driver)
 * **Hosting/Deployment:** Vercel (Server & Client)
 * **Security:** JSON Web Tokens (JWT), CORS Middleware, Dotenv Environment Management
