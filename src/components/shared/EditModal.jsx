@@ -18,7 +18,7 @@ export function EditModal({ room }) {
             amenities: amenities
         };
 
-        // delete studyRoom['amenities[]'];
+        delete studyRoom['amenities[]'];
 
         const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/rooms/${room._id}`, {
             method: 'PATCH',
